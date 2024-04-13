@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--HEAD START-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Recipe</title>
+    <link rel="stylesheet" href="Assets/CSS/editprofile.css">
+</head>
+<!--HEAD END-->
+
+<!--BODY START-->
+
+<body>
+
+    <div id="content">
+
+       
+
+        <!--START SECOND SECTION-->
+        <section id="upload-1">
+            <img src="Assets/Images/imglogo.png" alt="logo" id="login-logo">
+            <br><br><br> <h1>Upload Profile Picture</h1>
+            <input type="submit" value="Choose file">
+            <p>Acceptable file types: .jpg, .png, .pdf | Max file size: 10MB</p>
+            <h1>Instructions</h1>
+            <p>Select a file from your computer.Wait for the upload to complete.Add a title and description.</p>
+            </section>
+
+             <!--START FIRST SECTION-->
+      <!-- <div id="upload-2">
+        <h1>Upload Your Recipe</h1>
+        <P><input type="submit" name="upload file" id="uploadFile" value="Submit"></P>
+       </div>-->
+    <!--END FIRST SECTION-->
+
+            <div id="upload-wrapper">
+                <h1>Chef Details</h1>
+                <h2>Enter Your Profile Details</h2>
+
+                <!--FORM START-->
+                <form action="login-backend.php" method="POST">
+                    <p> <!--<label for="firstName">First Name:</label>-->
+                        <input type="firstName" name="firstName" placeholder="First Name" id="firstName">
+                    </p>
+                    <p> <!--<label for="lastName">Last Name:</label>-->
+                        <input type="lastName" name="lastName" placeholder="Last Name" id="lastName">
+                    </p>
+                     <p>
+                        <!-- <label for="email">Email:</label>-->
+                        <input type="email" name="email" placeholder="Email" id="Email">
+                    </p>
+                     <p> <!--<label for="phoneNumber">Phone Number:</label>-->
+                        <input type="phoneNumber" name="phoneNumber" placeholder="Phone Number" id="phoneNumber">
+                    </p> 
+                    <p> <!--<label for="location">Location:</label>-->
+                        <input type="location" name="location" placeholder="Location" id="location">
+                    </p>
+                    <p> <!--<label for="email">Email:</label>-->
+                        <input type="email" name="email" placeholder="Short Bio" id="Email">
+                    </p>
+                    <!--<p>
+                        <label for="password">Password:</label>
+                        <input type="password" name="password" placeholder="Password" id="Password">
+                    </p>-->
+                    <p>
+                        <input type="submit" value="Submit">
+
+                    </p>
+                </form>
+                <!--Don't have an account? <i><a href="register.php">Register Here</a></i>-->
+
+
+                <!--END SECOND SECTION-->
+            </div>
+
+       <!-- </section>-->
+
+</body>
+<!--BODY END-->
+
+</html>

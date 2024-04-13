@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--HEAD START-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Recipe</title>
+    <link rel="stylesheet" href="Assets/CSS/uploadrecipe.css">
+</head>
+<!--HEAD END-->
+
+<!--BODY START-->
+
+<body>
+
+    <div id="content">
+
+       
+
+        <!--START SECOND SECTION-->
+        <section id="upload-1">
+            <img src="Assets/Images/imglogo.png" alt="logo" id="login-logo">
+            <br><br><br> <h1>Upload Your Recipe</h1>
+            <input type="submit" value="Choose file">
+            <p>Acceptable file types: .jpg, .png, .pdf | Max file size: 10MB</p>
+            <h1>Instructions</h1>
+            <p>Select a file from your computer.Wait for the upload to complete.Add a title and description.</p>
+        </section>
+
+
+
+             <!--START FIRST SECTION-->
+      <!-- <div id="upload-2">
+        <h1>Upload Your Recipe</h1>
+        <P><input type="submit" name="upload file" id="uploadFile" value="Submit"></P>
+       </div>-->
+    <!--END FIRST SECTION-->
+
+            <div id="upload-wrapper">
+                <h1>Search Chef</h1>
+                <h2>Looking for a chef!</h2>
+
+                <!--FORM START-->
+                <form action="login-backend.php" method="POST">
+                   
+                   
+                   
+                   
+                   <!-- <p> <label for="email">Email:</label>-->
+                      <!--  <input type="Title" name="Title" placeholder="Title" id="title"> -->
+                   <!--- </p>-->
+                   <!--- <p> <label for="email">Email:</label>-->
+                      <!--  <input type="ingredents" name="ingredents" placeholder="Ingredents(Seperate with a comma)" id="ingredents">
+                    </p>
+                    <p> <label for="email">Email:</label>
+                        <input type="description" name="description" placeholder="Description" id="description">
+                       
+                    </p>
+                    <p>
+                        <label for="password">Password:</label>
+                        <input type="password" name="password" placeholder="Password" id="Password">
+                    </p>
+                    <p>  -->
+
+
+                    
+
+
+                     <!--New form -->
+            <label>Chef Name:</label>
+            <input type="text" name="chefname" /><br><br>
+            <label>Category:&nbsp;&nbsp;</label>
+            <input type="text" name="category" /> <br><br>
+            <label>Cuisine:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <input type="text" name="cuisine" /> <br><br>
+            <label>Location:&nbsp;&nbsp;&nbsp;</label>
+            <input type="text" name="location" /> <br><br>
+            &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="submit" name="submit" value="Search" />
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="button" value="Reset" /> 
+                </form>
+                <!--Don't have an account? <i><a href="register.php">Register Here</a></i>-->
+
+
+                <!--END SECOND SECTION-->
+            </div>
+
+       <!-- </section>-->
+
+</body>
+<!--BODY END-->
+
+</html>
