@@ -1,4 +1,5 @@
 <?php
+
 // START A SESSION
 
 session_start();
@@ -27,6 +28,15 @@ session_start();
         <!--MAIN START-->
         <main>
             <!--Main Section start-->
+            <?php
+            if (isset($_SESSION['user_id']) && $_SESSION['user_type'] == 'chef') {
+                // Display edit and delete buttons for recipes if $recipe is set
+                if (isset($recipe)) {
+                    echo "<a href='edit_recipe.php?id={$recipe['id']}' class='edit-button'>Edit Recipe</a>";
+                    echo "<a href='delete_recipe.php?id={$recipe['id']}' class='delete-button'>Delete Recipe</a>";
+                }
+            }
+            ?>
             <h2>Blog</h2>
             <img src="Assets/Images/3jollof.jpg" alt="Blog post image" id="Blog-image">
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, deserunt incidunt maiores doloribus

@@ -1,15 +1,24 @@
 <?php
+session_start(); // Start the session
 
 include("./connection.php");
 
+// Fetch distinct categories from the database
+$categories_sql = "SELECT DISTINCT category FROM recipepage";
+$categories_result = mysqli_query($db, $categories_sql);
 
+// Check if form is submitted
+if(isset($_POST['category_filter'])) {
+    $selected_category = $_POST['category_filter'];
+    // Query recipes filtered by selected category
+    $recipes_sql = "SELECT * FROM recipepage WHERE category = '$selected_category'";
+} else {
+    // Query all recipes if no category filter is selected
+    $recipes_sql = "SELECT * FROM recipepage";
+}
 
-$recipes_sql = "SELECT * FROM recipepage";
 $result = mysqli_query($db, $recipes_sql);
-
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,107 +27,75 @@ $result = mysqli_query($db, $recipes_sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Recipes page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="Assets/CSS/recipesstyle.css">
 </head>
 
 <body>
 
-    <div id="content">
+    <div class="container">
         <!--HEADER START-->
         <?php include "./partials/header.php" ?>
         <!--HEADER END-->
-        <!--MAIN START-->
-        <?php
-            if ($result && mysqli_num_rows($result) > 0) {
-                while ($recipe = mysqli_fetch_assoc($result)) {
-                    echo '<a href="./recipePage.php?recipeName=' . urlencode($recipe["recipeName"]) . '" id="recipessection-' . $recipe["id"] . '"><section>';
-                    echo '<h2>' . $recipe["recipeName"] . '</h2>';
-                    echo '<img src="Assets/Images/recipe/beans and plantain 2.jpg" alt="recipe-2" id="recipe-2">';
-                    // echo '<img src="Assets/Images/recipe/' . $recipe["recipeName"] . '.jpg" alt="' . $recipe["recipeName"] . '" id="recipe-' . $recipe["id"] . '">'; 
-                    echo '<p>' . $recipe["category"] . '</p>'; 
-                    echo '</section></a>';
-                }
-            } else {
-                echo "No recipes found";
-            }
-        ?>
-
-       <!-- <a href="#"id="recipessection-2" > <section >
-            <h2>Recipe 2</h2>
-            <img src="Assets/Images/recipe/beans and plantain 2.jpg" alt="recipe-2" id="recipe-2"> 
-            <p>Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.</p> 
-        </section></a>
-
-        <a href="#" id="recipessection-3"><section >
-             <h2>Recipe 3</h2> 
-             <img src="Assets/Images/recipe/yam 2.jpg" alt="recipe-3" id="recipe-3"> 
-             <p>Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.</p> 
-        </section></a>
-
-        <a href="#" id="recipessection-4" ><section >
-             <h2>Recipe 4</h2>
-             <img src="Assets/Images/recipe/fufu" alt="recipe-4" id="recipe-4"> 
-             <p>Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.</p> 
-        </section></a>
-
-        <a href="#" id="recipessection-5" ><section >
-            <h2>Recipe 5</h2>
-            <img src="Assets/Images/recipe/Tuo Zaafi" alt="recipe-5" id="recipe-5"> 
-            <p>Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.</p> 
-        </section></a>
-
-        <a href="#" id="recipessection-6"><section >
-            <h2>Recipe 6</h2>
-            <img src="Assets/Images/recipe/Fanti_Kenkey_and_fish.jpg" alt="recipe-6" id="recipe-6"> 
-            <p>Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.</p> 
-        </section></a> -->
-        
-            <ul>
-                <li><a href="">More</a></li>
-            </ul>
-        
-        
-
-        <!--MAIN END-->
-        <!--<section><h2>Trending Recipes</h2>
-            <img src="Assets/Images/jollof.jpg" alt="Jollof" id="jollof-image">
-            <p>Jollof</p>
-
-        </section>
-        <aside>
-            <img src="Assets/Images/friedrice.jpg" alt="friedrice" id="fried-rice">
-            <p>Fried Rice</p>
-        </aside>-->
-
-        <!--FOOTER START-->
-        <footer>
-            <div class="footer-one">
-                <h2>Pot Belly Ghana</h2>
-                <h5>Find Delicious Recipes from Around the world</h5>
-                <h5>Pot Belly Ghana</h5>
-
-                <div class="socials">
-                    <h4>Stay Connected with Us</h4>
-                    <ion-icon name="logo-facebook"></ion-icon>
-                    <ion-icon name="logo-twitter"></ion-icon>
-                    <ion-icon name="logo-instagram"></ion-icon>
-                    <ion-icon name="logo-linkedin"></ion-icon>
+        <!--FILTER FORM START-->
+        <form method="POST" action="" class="mb-3 mt-3">
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <label for="category_filter" class="col-form-label">Filter by Category:</label>
+                </div>
+                <div class="col-auto">
+                    <select class="form-select" name="category_filter" id="category_filter">
+                        <option value="">All Categories</option>
+                        <?php
+                        // Display options for category filter dropdown
+                        while ($category_row = mysqli_fetch_assoc($categories_result)) {
+                            $category_name = $category_row['category'];
+                            echo "<option value='$category_name'>$category_name</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary" type="submit">Filter</button>
                 </div>
             </div>
-
-            <div class="footer-two">
-                <h5>Pricing</h5>
-                <h5>Location</h5>
-                <h5>In the press</h5>
-            </div>
-
-
-        </footer>
-        <!--FOOTER END-->
+        </form>
+        <!--FILTER FORM END-->
+        <!--MAIN START-->
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <?php
+                if ($result && mysqli_num_rows($result) > 0) {
+                    while ($recipe = mysqli_fetch_assoc($result)) {
+                        ?>
+                        <div class="col">
+                            <a href="./recipePage.php?recipeName=<?= urlencode($recipe["recipeName"]) ?>" class="text-decoration-none">
+                                <div class="card">
+                                    <img src="Assets/Images/recipe/beans and plantain 2.jpg" class="card-img-top" alt="recipe-2">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?= $recipe["recipeName"] ?></h5>
+                                        <p class="card-text"><?= $recipe["category"] ?></p>
+                                        <?php
+                                        // Display edit and delete buttons for chefs
+                                        if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'chef') {
+                                            echo "<a href='edit_recipe.php?id={$recipe['id']}' class='btn btn-primary'>Edit</a>";
+                                            echo "<a href='delete_recipe.php?id={$recipe['id']}' class='btn btn-danger'>Delete</a>";
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <?php
+                    }
+                } else {
+                    echo "<p class='col'>No recipes found</p>";
+                }
+            ?>
+        </div>
+        <!--MAIN END-->
     </div>
 
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

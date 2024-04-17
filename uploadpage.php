@@ -55,29 +55,7 @@ session_start();
                 <h2>Enter new recipe details</h2>
 
                 <!--FORM START-->
-                <form action="uploadpage.inc.php" method="POST">
-                   
-                   
-                   
-                   <!-- <p> <label for="email">Email:</label>-->
-                      <!--  <input type="Title" name="Title" placeholder="Title" id="title"> -->
-                   <!--- </p>-->
-                   <!--- <p> <label for="email">Email:</label>-->
-                      <!--  <input type="ingredents" name="ingredents" placeholder="Ingredents(Seperate with a comma)" id="ingredents">
-                    </p>
-                    <p> <label for="email">Email:</label>
-                        <input type="description" name="description" placeholder="Description" id="description">
-                       
-                    </p>
-                    <p>
-                        <label for="password">Password:</label>
-                        <input type="password" name="password" placeholder="Password" id="Password">
-                    </p>
-                    <p>  -->
-
-
-
-
+                <form action="uploadpage.inc.php" method="POST" enctype="multipart/form-data">
                      <!--New form -->
                         <label>Recipe Name:&nbsp;&nbsp;&nbsp;&nbsp;</label>
                         <input type="text" name="recipeName" /> <br><br>

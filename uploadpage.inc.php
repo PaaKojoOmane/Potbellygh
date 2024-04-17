@@ -2,86 +2,78 @@
 
 session_start();
 include('connection.php');
-//  $chefname=$_POST['chefname'];
- $recipeName=$_POST['recipeName'];
- $category=$_POST['category'];
- $ingredient=$_POST['ingredient'];
- $instructions=$_POST['instructions'];
- $photo = $_POST['photo'];
 
+// Get form data
+$recipeName = $_POST['recipeName'];
+$category = $_POST['category'];
+$ingredient = $_POST['ingredient'];
+$instructions = $_POST['instructions'];
 
+// Get the ID of the recipe owner from the session (current_user)
+$chef_id = $_SESSION['user_id'];
 
-// GET THE ID OF THE RECIPE OWNER FROM THE SESSION (Current_user)
-
-    $chef_id = $_SESSION['user_id'];
-
-    try {
-        //code...
-        
-            if(empty($_POST["recipeName"]) || empty($_POST["category"]) || empty($_POST["ingredient"]) || empty($_POST["ingredient"]) || empty($_POST["instructions"]))
-            {
-                echo "All fields are required.";
-            }
-            
-            else
-            {   
-                // Check if "user" session variable is set
-                if (!isset($_SESSION['user_id'])) {
-                    throw new Exception("User session not set.");
-                }
-
-                // Handle file uploads
-                $fileName = $_FILES['photo']['name'];
-                $fileTmpName = $_FILES['photo']['tmp_name'];
-                $fileSize = $_FILES['photo']['size'];
-                $fileErr = $_FILES['photo']['error'];
-                $fileType = $_FILES['photo']['type'];
-                
-                $fileExt = explode('.', $fileName);
-                $fileActualExt = strtolower(end($fileExt));
-                
-                $allowedFormat = array('jpg', 'jpeg', 'png', 'avif', 'webp');
-                
-                // check if type of file submitted is of a format we allowed
-                if (in_array($fileActualExt, $allowedFormat)) {
-                    if ($fileErr === 0) {
-                        if ($fileSize < 1000000) {
-                            $fileNameNew = uniqid('', true) . "." . $fileActualExt;
-                            $fileDestination = './uploads/' . $fileNameNew;
-                            // move the file to the desired location
-                            move_uploaded_file($fileTmpName, $fileDestination);
-                            echo "uploaded";
-                            $photo = $fileNameNew; // Assign the new filename to $photo
-                    } else {
-                        echo "<p>The file is too large!</p>";
-                    }
-                } else {
-                    echo "<p>There was an error uploading your file!</p>";
-                }
-            } else {
-                echo "<p>You cannot upload files of this type!</p>";
-            }
-            
-            
-            $sql = "INSERT INTO recipepage (user_id, recipeName,category,ingredient,instructions, photo) VALUES ('$chef_id', '$recipeName','$category','$ingredient','$instructions', '$photo')";
-            // $sql = "INSERT INTO recipepage (recipeName, category, ingredient, instructions) VALUES ('$recipeName','$category','$ingredient','$instructions')";
-            
-            $result = mysqli_query($db, $sql);
-            
-            if($result)
-            {
-                echo "Successfully";
-                header("Location: index.php");
-            }
-            else
-            {
-                echo "Something Went Wrong!";
-                header("Location: uploadpage.php");
-            }
+try {
+    // Check if required fields are empty
+    if (empty($recipeName) || empty($category) || empty($ingredient) || empty($instructions)) {
+        echo "All fields are required.";
+    } else {
+        // Check if "user" session variable is set
+        if (!isset($_SESSION['user_id'])) {
+            throw new Exception("User session not set.");
         }
 
-    } catch (PDOException $e) {
-        // Handle database errors
-        echo "Error: " . $e->getMessage();
+        // Handle file uploads
+        $fileName = $_FILES['photo']['name'];
+        $fileTmpName = $_FILES['photo']['tmp_name'];
+        $fileSize = $_FILES['photo']['size'];
+        $fileError = $_FILES['photo']['error'];
+        $fileType = $_FILES['photo']['type'];
+
+        // Get file extension
+        $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+        // Allowed file formats
+        $allowedFormats = array('jpg', 'jpeg', 'png', 'avif', 'webp');
+
+        // Check if file format is allowed
+        if (in_array($fileExt, $allowedFormats)) {
+            // Check for upload errors
+            if ($fileError === 0) {
+                // Check file size
+                if ($fileSize < 1000000) { // 1MB limit
+                    $fileNameNew = uniqid('', true) . '.' . $fileExt;
+                    $fileDestination = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $fileNameNew;
+
+                    // Move the file to the desired location
+                    if (move_uploaded_file($fileTmpName, $fileDestination)) {
+                        echo "File uploaded successfully.";
+                    } else {
+                        echo "Error moving file.";
+                    }
+                } else {
+                    echo "The file is too large.";
+                }
+            } else {
+                echo "Error uploading file: $fileError";
+            }
+        } else {
+            echo "You cannot upload files of this type.";
+        }
+
+        // Insert data into database if file upload was successful
+        $sql = "INSERT INTO recipepage (user_id, recipeName, category, ingredient, instructions, photo) VALUES ('$chef_id', '$recipeName', '$category', '$ingredient', '$instructions', '$fileNameNew')";
+        $result = mysqli_query($db, $sql);
+
+        if ($result) {
+            echo "Data inserted successfully.";
+            header("Location: index.php");
+        } else {
+            echo "Error inserting data.";
+            header("Location: uploadpage.php");
+        }
     }
+} catch (PDOException $e) {
+    // Handle database errors
+    echo "Database error: " . $e->getMessage();
+}
 ?>
